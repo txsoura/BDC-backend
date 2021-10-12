@@ -16,7 +16,7 @@ class CreateConstructionInspectionsTable extends Migration
         Schema::create('construction_inspections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('construction_id')->references('id')->on('constructions');
-            $table->timestamp('seem');
+            $table->string('seem');
             $table->string('report')->nullable();
             $table->timestamps();
             $table->softDeletes();

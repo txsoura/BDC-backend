@@ -22,8 +22,31 @@ Route::group(['prefix' => 'v1'], function () {
         ];
     });
 
-//    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//        return $request->user();
-//    });
+    Route::apiResource('users', 'UserController');
+    Route::put('users/{user}/approve', 'UserController@approve')->name('users.approve');
+    Route::put('users/{user}/block', 'UserController@block')->name('users.block');
+
+    Route::apiResource('constructions', 'ConstructionController');
+    Route::put('constructions/{construction}/cancel', 'ConstructionController@cancel')->name('constructions.cancel');
+    Route::put('constructions/{construction}/start', 'ConstructionController@start')->name('constructions.start');
+    Route::put('constructions/{construction}/pause', 'ConstructionController@pause')->name('constructions.pause');
+    Route::put('constructions/{construction}/abandon', 'ConstructionController@abandon')->name('constructions.abandon');
+    Route::put('constructions/{construction}/finalize', 'ConstructionController@finalize')->name('constructions.finalize');
+
+    Route::group(['prefix' => 'constructions/{construction}'], function () {
+        Route::apiResource('users', 'ConstructionUserController');
+        Route::apiResource('stages', 'StageController');
+        Route::apiResource('inspections', 'InspectionController');
+
+        Route::apiResource('providers', 'ProviderController');
+        Route::apiResource('products', 'ProductController');
+
+        Route::group(['prefix' => 'products/{product}'], function () {
+            Route::apiResource('stocks', 'StockController')->except('update');
+            Route::put('stocks/{stock}/cancel', 'StockController@cancel')->name('stocks.cancel');
+            Route::put('stocks/{stock}/arrive', 'StockController@arrive')->name('stocks.arrive');
+            Route::put('stocks/{stock}/outgoing', 'StockController@outgoing')->name('stocks.outgoing');
+        });
+    });
 });
 

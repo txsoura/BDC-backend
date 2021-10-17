@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateConstructionInspectionsTable extends Migration
+class CreateInspectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateConstructionInspectionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('construction_inspections', function (Blueprint $table) {
+        Schema::create('inspections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('construction_id')->references('id')->on('constructions');
             $table->string('seem');
@@ -30,6 +30,6 @@ class CreateConstructionInspectionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('construction_inspections');
+        Schema::dropIfExists('inspections');
     }
 }

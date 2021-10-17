@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Construction;
 use App\Models\Provider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,6 +24,7 @@ class ProviderFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
+            'construction_id' => Construction::factory(),
         ];
     }
 }

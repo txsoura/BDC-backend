@@ -17,6 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::middleware('auth:sanctum')->get('/auth/user', function (Request $request) {
-//    return $request->user();
-//});
+Route::middleware('auth:sanctum')->get('/auth/user', function (Request $request) {
+    return $request->user();
+});

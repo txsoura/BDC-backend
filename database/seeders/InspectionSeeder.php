@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\ConstructionInspection;
+use App\Models\Inspection;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
 
-class ConstructionInspectionSeeder extends Seeder
+class InspectionSeeder extends Seeder
 {
     /**
      * Run the database seeders.
@@ -16,7 +16,7 @@ class ConstructionInspectionSeeder extends Seeder
     public function run()
     {
         if (App::environment('local')) {
-            ConstructionInspection::factory(1)->create();
+            Inspection::factory(1)->create();
         }
     }
 }

@@ -3,17 +3,17 @@
 namespace Database\Factories;
 
 use App\Models\Construction;
-use App\Models\ConstructionStage;
+use App\Models\Stage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ConstructionStageFactory extends Factory
+class StageFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ConstructionStage::class;
+    protected $model = Stage::class;
 
     /**
      * Define the model's default state.

@@ -2,6 +2,22 @@
 
 namespace App\Providers;
 
+use App\Models\Construction;
+use App\Models\ConstructionUser;
+use App\Models\Inspection;
+use App\Models\Product;
+use App\Models\Provider;
+use App\Models\Stage;
+use App\Models\Stock;
+use App\Models\User;
+use App\Observers\ConstructionObserver;
+use App\Observers\ConstructionUserObserver;
+use App\Observers\InspectionObserver;
+use App\Observers\ProductObserver;
+use App\Observers\ProviderObserver;
+use App\Observers\StageObserver;
+use App\Observers\StockObserver;
+use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,6 +42,15 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        parent::boot();
+
+        Construction::observe(ConstructionObserver::class);
+        ConstructionUser::observe(ConstructionUserObserver::class);
+        Inspection::observe(InspectionObserver::class);
+        Product::observe(ProductObserver::class);
+        Provider::observe(ProviderObserver::class);
+        Stage::observe(StageObserver::class);
+        Stock::observe(StockObserver::class);
+        User::observe(UserObserver::class);
     }
 }

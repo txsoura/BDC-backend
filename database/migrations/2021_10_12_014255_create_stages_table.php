@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateConstructionStagesTable extends Migration
+class CreateStagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateConstructionStagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('construction_stages', function (Blueprint $table) {
+        Schema::create('stages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->foreignId('construction_id')->references('id')->on('constructions');
@@ -30,6 +30,6 @@ class CreateConstructionStagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('construction_stages');
+        Schema::dropIfExists('stages');
     }
 }

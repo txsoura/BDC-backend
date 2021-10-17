@@ -28,6 +28,7 @@ class CreateStocksTable extends Migration
             $table->string('receipt')->nullable();
             $table->timestamp('canceled_at')->nullable();
             $table->timestamp('arrived_at')->nullable();
+            $table->timestamp('outgoing_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

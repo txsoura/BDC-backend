@@ -12,4 +12,5 @@ final class StockStatus extends Enum
     const PENDENT = 'pendent';
     const CANCELED = 'canceled';
     const ARRIVED = 'arrived';
+    const OUTGOING = 'outgoing';
 }

@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->enum('type', ProductType::toArray());
             $table->tinyInteger('notify_when_stock_below')->default(0);
             $table->decimal('available', 10)->default(0.00);
+            $table->foreignId('construction_id')->references('id')->on('constructions');
             $table->timestamps();
             $table->softDeletes();
         });

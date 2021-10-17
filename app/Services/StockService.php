@@ -58,27 +58,27 @@ class StockService extends CoreService
 
     /**
      * @param int $id
-     * @param int $construction_id
-     * @param int $product_id
+     * @param int $constructionId
+     * @param int $productId
      * @return Model
      */
-    public function show(int $id, int $construction_id, int $product_id): Model
+    public function show(int $id, int $constructionId, int $productId): Model
     {
         $this->request = resolve($this->queryParamsRequest);
 
-        return $this->repository->setRequest($this->request)->findOrFail($id, $construction_id, $product_id);
+        return $this->repository->setRequest($this->request)->findOrFail($id, $constructionId, $productId);
     }
 
 
     /**
      * @param int $id
-     * @param int $construction_id
-     * @param int $product_id
+     * @param int $constructionId
+     * @param int $productId
      * @return bool
      */
-    public function destroy(int $id, int $construction_id, int $product_id): bool
+    public function destroy(int $id, int $constructionId, int $productId): bool
     {
-        $model = $this->repository->findOrFail($id, $construction_id, $product_id);
+        $model = $this->repository->findOrFail($id, $constructionId, $productId);
 
         try {
             $model->delete();
@@ -93,16 +93,16 @@ class StockService extends CoreService
 
     /**
      * @param int $id
-     * @param int $construction_id
-     * @param int $product_id
+     * @param int $constructionId
+     * @param int $productId
      * @return bool
      */
-    public function forceDestroy(int $id, int $construction_id, int $product_id): bool
+    public function forceDestroy(int $id, int $constructionId, int $productId): bool
     {
         $model = Stock::withTrashed()
             ->whereId($id)
-            ->WhereConstructionId($construction_id)
-            ->whereProductId($product_id)
+            ->WhereConstructionId($constructionId)
+            ->whereProductId($productId)
             ->firstOrFail();
 
         try {
@@ -118,16 +118,16 @@ class StockService extends CoreService
 
     /**
      * @param int $id
-     * @param int $construction_id
-     * @param int $product_id
+     * @param int $constructionId
+     * @param int $productId
      * @return bool
      */
-    public function restore(int $id, int $construction_id, int $product_id): bool
+    public function restore(int $id, int $constructionId, int $productId): bool
     {
         $model = Stock::withTrashed()
             ->whereId($id)
-            ->WhereConstructionId($construction_id)
-            ->whereProductId($product_id)
+            ->WhereConstructionId($constructionId)
+            ->whereProductId($productId)
             ->firstOrFail();
 
         try {

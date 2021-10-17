@@ -30,18 +30,18 @@ trait BaseConstructionCRUDMethodsService
         }
     }
 
-    public function show($id, $construction_id)
+    public function show($id, $constructionId)
     {
         $this->request = resolve($this->queryParamsRequest);
 
-        return $this->repository->setRequest($this->request)->findOrFail($id, $construction_id);
+        return $this->repository->setRequest($this->request)->findOrFail($id, $constructionId);
     }
 
-    public function update($id, $construction_id)
+    public function update($id, $constructionId)
     {
         $this->request = resolve($this->updateRequest);
 
-        $model = $this->repository->findOrFail($id, $construction_id);
+        $model = $this->repository->findOrFail($id, $constructionId);
 
         try {
             $model->update($this->request->validated());
@@ -54,9 +54,9 @@ trait BaseConstructionCRUDMethodsService
         }
     }
 
-    public function destroy($id, $construction_id)
+    public function destroy($id, $constructionId)
     {
-        $model = $this->repository->findOrFail($id, $construction_id);
+        $model = $this->repository->findOrFail($id, $constructionId);
 
         try {
             $model->delete();
@@ -69,11 +69,11 @@ trait BaseConstructionCRUDMethodsService
         }
     }
 
-    public function forceDestroy($id, $construction_id)
+    public function forceDestroy($id, $constructionId)
     {
         $model = $this->model()::withTrashed()
             ->whereId($id)
-            ->whereConstructionId($construction_id)
+            ->whereConstructionId($constructionId)
             ->firstOrFail();
 
         try {
@@ -87,11 +87,11 @@ trait BaseConstructionCRUDMethodsService
         }
     }
 
-    public function restore($id, $construction_id)
+    public function restore($id, $constructionId)
     {
         $model = $this->model()::withTrashed()
             ->whereId($id)
-            ->whereConstructionId($construction_id)
+            ->whereConstructionId($constructionId)
             ->firstOrFail();
 
         try {

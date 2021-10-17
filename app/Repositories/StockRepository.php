@@ -51,15 +51,15 @@ class StockRepository
 
     /**
      * @param int $id
-     * @param int $construction_id
-     * @param int $product_id
+     * @param int $constructionId
+     * @param int $productId
      * @return Model|null
      */
-    public function find(int $id, int $construction_id, int $product_id): ?Model
+    public function find(int $id, int $constructionId, int $productId): ?Model
     {
         return Stock::whereId($id)
-            ->whereConstructionId($construction_id)
-            ->whereProductId($product_id)
+            ->whereConstructionId($constructionId)
+            ->whereProductId($productId)
             ->when($this->request, function ($query) {
                 if (key_exists('include', $this->request))
                     return $query->with(explode(',', $this->request['include']));
@@ -69,15 +69,15 @@ class StockRepository
 
     /**
      * @param int $id
-     * @param int $construction_id
-     * @param int $product_id
+     * @param int $constructionId
+     * @param int $productId
      * @return Model|null
      */
-    public function findOrFail(int $id, int $construction_id, int $product_id): ?Model
+    public function findOrFail(int $id, int $constructionId, int $productId): ?Model
     {
         return Stock::whereId($id)
-            ->whereConstructionId($construction_id)
-            ->whereProductId($product_id)
+            ->whereConstructionId($constructionId)
+            ->whereProductId($productId)
             ->when($this->request, function ($query) {
                 if (key_exists('include', $this->request))
                     return $query->with(explode(',', $this->request['include']));

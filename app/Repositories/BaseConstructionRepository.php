@@ -45,13 +45,13 @@ abstract class BaseConstructionRepository
 
     /**
      * @param int $id
-     * @param int $construction_id
+     * @param int $constructionId
      * @return Model|null
      */
-    public function find(int $id, int $construction_id): ?Model
+    public function find(int $id, int $constructionId): ?Model
     {
         return $this->model()::where('id', $id)
-            ->where('construction_id', $construction_id)
+            ->where('construction_id', $constructionId)
             ->when($this->request, function ($query) {
                 if (key_exists('include', $this->request))
                     return $query->with(explode(',', $this->request['include']));
@@ -68,13 +68,13 @@ abstract class BaseConstructionRepository
 
     /**
      * @param int $id
-     * @param int $construction_id
+     * @param int $constructionId
      * @return Model|null
      */
-    public function findOrFail(int $id, int $construction_id): ?Model
+    public function findOrFail(int $id, int $constructionId): ?Model
     {
         return $this->model()::where('id', $id)
-            ->where('construction_id', $construction_id)
+            ->where('construction_id', $constructionId)
             ->when($this->request, function ($query) {
                 if (key_exists('include', $this->request))
                     return $query->with(explode(',', $this->request['include']));

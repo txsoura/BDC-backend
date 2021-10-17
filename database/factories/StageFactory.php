@@ -3,17 +3,17 @@
 namespace Database\Factories;
 
 use App\Models\Construction;
-use App\Models\ConstructionInspection;
+use App\Models\Stage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ConstructionInspectionFactory extends Factory
+class StageFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ConstructionInspection::class;
+    protected $model = Stage::class;
 
     /**
      * Define the model's default state.
@@ -23,9 +23,9 @@ class ConstructionInspectionFactory extends Factory
     public function definition()
     {
         return [
+            'name' => $this->faker->name(),
             'construction_id' => Construction::factory(),
-            'seem' => $this->faker->text,
-            'report' => $this->faker->imageUrl(),
+            'budget' => $this->faker->randomFloat(2, 0, 100),
         ];
     }
 }

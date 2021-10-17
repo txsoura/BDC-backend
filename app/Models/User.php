@@ -7,6 +7,7 @@ use App\Enums\UserStatus;
 use Database\Factories\UserFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -32,6 +33,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Collection|ConstructionUser[] $constructions
+ * @property-read int|null $constructions_count
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @method static UserFactory factory(...$parameters)
@@ -104,4 +107,9 @@ class User extends Authenticatable
         'status' => UserStatus::PENDENT,
         'role' => UserRole::USER
     ];
+
+    public function constructions()
+    {
+        return $this->hasMany(ConstructionUser::class);
+    }
 }

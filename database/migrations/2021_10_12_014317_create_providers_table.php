@@ -16,6 +16,7 @@ class CreateProvidersTable extends Migration
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('construction_id')->references('id')->on('constructions');
             $table->timestamps();
             $table->softDeletes();
         });

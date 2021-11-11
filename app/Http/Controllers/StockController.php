@@ -112,7 +112,6 @@ class StockController extends Controller
             throw (new ModelNotFoundException())->setModel(Stock::Class);
         }
 
-
         if (!$this->service->destroy($stock->id, $construction->id, $product->id)) {
             return response()->json([
                 'message' => trans('core::message.delete_failed')
@@ -129,20 +128,16 @@ class StockController extends Controller
      *
      * @param Construction $construction
      * @param Product $product
-     * @param Stock $stock
+     * @param int $stock
      * @return JsonResponse
      */
-    public function forceDestroy(Construction $construction, Product $product, Stock $stock): JsonResponse
+    public function forceDestroy(Construction $construction, Product $product, int $stock): JsonResponse
     {
         if ($construction->id != $product->construction_id) {
             throw (new ModelNotFoundException())->setModel(Product::Class);
         }
 
-        if ($product->id != $stock->product_id) {
-            throw (new ModelNotFoundException())->setModel(Stock::Class);
-        }
-
-        if (!$this->service->forceDestroy($stock->id, $construction->id, $product->id)) {
+        if (!$this->service->forceDestroy($stock, $construction->id, $product->id)) {
             return response()->json([
                 'message' => trans('core::message.delete_failed')
             ], 400);
@@ -158,20 +153,16 @@ class StockController extends Controller
      *
      * @param Construction $construction
      * @param Product $product
-     * @param Stock $stock
+     * @param int $stock
      * @return JsonResponse
      */
-    public function restore(Construction $construction, Product $product, Stock $stock): JsonResponse
+    public function restore(Construction $construction, Product $product, int $stock): JsonResponse
     {
         if ($construction->id != $product->construction_id) {
             throw (new ModelNotFoundException())->setModel(Product::Class);
         }
 
-        if ($product->id != $stock->product_id) {
-            throw (new ModelNotFoundException())->setModel(Stock::Class);
-        }
-
-        if (!$this->service->restore($stock->id, $construction->id, $product->id)) {
+        if (!$this->service->restore($stock, $construction->id, $product->id)) {
             return response()->json([
                 'message' => trans('core::message.delete_failed')
             ], 400);
@@ -183,14 +174,14 @@ class StockController extends Controller
     }
 
     /**
-     * Update the stock status to arrived.
+     * Update the stock status to received.
      *
      * @param Construction $construction
      * @param Product $product
      * @param Stock $stock
      * @return JsonResponse|StockResource
      */
-    public function arrive(Construction $construction, Product $product, Stock $stock)
+    public function receive(Construction $construction, Product $product, Stock $stock)
     {
         if ($construction->id != $product->construction_id) {
             throw (new ModelNotFoundException())->setModel(Product::Class);
@@ -202,29 +193,29 @@ class StockController extends Controller
 
         if ($stock->flow != StockFlow::IN) {
             return response()->json([
-                'message' => trans('stock.arrive.message'),
-                'error' => trans('stock.arrive.flow.error')
+                'message' => trans('stock.receive.message'),
+                'error' => trans('stock.receive.flow.error')
             ], 400);
         }
 
         if ($stock->status != StockStatus::PENDENT) {
             return response()->json([
-                'message' => trans('stock.arrive.message'),
-                'error' => trans('stock.arrive.status.error')
+                'message' => trans('stock.receive.message'),
+                'error' => trans('stock.receive.status.error')
             ], 400);
         }
 
         $stock = $this->service
-            ->arrive($stock);
+            ->receive($stock);
 
         if (!$stock) {
             return response()->json([
-                'message' => trans('stock.arrive_failed')
+                'message' => trans('stock.receive_failed')
             ], 400);
         }
 
         return (new StockResource($stock))
-            ->additional(['message' => trans('stock.arrived')]);
+            ->additional(['message' => trans('stock.received')]);
     }
 
     /**
@@ -266,7 +257,7 @@ class StockController extends Controller
     }
 
     /**
-     * Update the stock status to outgoing.
+     * Update the stock status to withdrawn.
      *
      * @param Request $request
      * @param Construction $construction
@@ -274,7 +265,7 @@ class StockController extends Controller
      * @param Stock $stock
      * @return JsonResponse|StockResource
      */
-    public function outgoing(Request $request, Construction $construction, Product $product, Stock $stock)
+    public function withdraw(Request $request, Construction $construction, Product $product, Stock $stock)
     {
         if ($construction->id != $product->construction_id) {
             throw (new ModelNotFoundException())->setModel(Product::Class);
@@ -286,15 +277,15 @@ class StockController extends Controller
 
         if ($stock->flow != StockFlow::OUT) {
             return response()->json([
-                'message' => trans('stock.outgoing.message'),
-                'error' => trans('stock.outgoing.flow.error')
+                'message' => trans('stock.withdraw.message'),
+                'error' => trans('stock.withdraw.flow.error')
             ], 400);
         }
 
         if ($stock->status != StockStatus::PENDENT) {
             return response()->json([
-                'message' => trans('stock.outgoing.message'),
-                'error' => trans('stock.outgoing.status.error')
+                'message' => trans('stock.withdraw.message'),
+                'error' => trans('stock.withdraw.status.error')
             ], 400);
         }
 
@@ -303,15 +294,15 @@ class StockController extends Controller
         ]);
 
         $stock = $this->service
-            ->outgoing($stock, $request['receiver']);
+            ->withdraw($stock, $request['receiver']);
 
         if (!$stock) {
             return response()->json([
-                'message' => trans('stock.outgoing_failed')
+                'message' => trans('stock.withdraw_failed')
             ], 400);
         }
 
         return (new StockResource($stock))
-            ->additional(['message' => trans('stock.outgoing')]);
+            ->additional(['message' => trans('stock.withdrawn')]);
     }
 }

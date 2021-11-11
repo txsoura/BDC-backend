@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Enums\StockStatus;
 use App\Models\Stock;
 use App\Support\Traits\GetAllWithFilters;
-use Illuminate\Database\Eloquent\Model;
 use Txsoura\Core\Helpers;
 use Txsoura\Core\Repositories\Traits\QueryFilterRepository;
 
@@ -29,7 +28,7 @@ class StockRepository
      * Allowed model columns to use in sort
      * @var array
      */
-    protected $allow_order = array('quantity', 'price', 'construction_id', 'provider_id', 'product_id', 'flow', 'status', 'outgoing_at', 'canceled_at', 'arrived_at', 'created_at', 'updated_at');
+    protected $allow_order = array('quantity', 'price', 'construction_id', 'provider_id', 'product_id', 'flow', 'status', 'withdrawn_at', 'canceled_at', 'received_at', 'created_at', 'updated_at');
 
     /**
      * Allowed model columns to use in query search
@@ -41,7 +40,7 @@ class StockRepository
      * Allowed model columns to use in filter by date
      * @var array
      */
-    protected $allow_between_dates = array('outgoing_at', 'canceled_at', 'arrived_at', 'created_at', 'updated_at');
+    protected $allow_between_dates = array('withdrawn_at', 'canceled_at', 'received_at', 'created_at', 'updated_at');
 
     /**
      * Allowed model columns to use in filter by value
@@ -53,16 +52,18 @@ class StockRepository
      * @param int $id
      * @param int $constructionId
      * @param int $productId
-     * @return Model|null
+     * @return Stock|null
      */
-    public function find(int $id, int $constructionId, int $productId): ?Model
+    public function find(int $id, int $constructionId, int $productId): ?Stock
     {
         return Stock::whereId($id)
             ->whereConstructionId($constructionId)
             ->whereProductId($productId)
             ->when($this->request, function ($query) {
                 if (key_exists('include', $this->request))
-                    return $query->with(explode(',', $this->request['include']));
+                    $query->with(explode(',', $this->request['include']));
+
+                return $query;
             })
             ->first();
     }
@@ -71,16 +72,40 @@ class StockRepository
      * @param int $id
      * @param int $constructionId
      * @param int $productId
-     * @return Model|null
+     * @return Stock|null
      */
-    public function findOrFail(int $id, int $constructionId, int $productId): ?Model
+    public function findOrFail(int $id, int $constructionId, int $productId): ?Stock
     {
         return Stock::whereId($id)
             ->whereConstructionId($constructionId)
             ->whereProductId($productId)
             ->when($this->request, function ($query) {
                 if (key_exists('include', $this->request))
-                    return $query->with(explode(',', $this->request['include']));
+                    $query->with(explode(',', $this->request['include']));
+
+                return $query;
+            })
+            ->firstOrFail();
+    }
+
+    /**
+     * @param int $id
+     * @param int $constructionId
+     * @param int $productId
+     * @return Stock|null
+     */
+    public function findOrFailWithTrashed(int $id, int $constructionId, int $productId): ?Stock
+    {
+        return Stock::withTrashed()
+            ->whereId($id)
+            ->whereConstructionId($constructionId)
+            ->whereProductId($productId)
+            ->when(key_exists('include', $this->request), function ($query) {
+                if ($this->checkIncludeColumns()) {
+                    $query->with(explode(',', $this->request['include']));
+                }
+
+                return $query;
             })
             ->firstOrFail();
     }
@@ -89,10 +114,10 @@ class StockRepository
      * @param Stock $stock
      * @return Stock|null
      */
-    public function arrive(Stock $stock): ?Stock
+    public function receive(Stock $stock): ?Stock
     {
-        $stock->status = StockStatus::ARRIVED;
-        $stock->arrived_at = now();
+        $stock->status = StockStatus::RECEIVED;
+        $stock->received_at = now();
         $stock->update();
 
         return $stock;
@@ -116,11 +141,11 @@ class StockRepository
      * @param string $receiver
      * @return Stock|null
      */
-    public function outgoing(Stock $stock, string $receiver): ?Stock
+    public function withdraw(Stock $stock, string $receiver): ?Stock
     {
-        $stock->status = StockStatus::OUTGOING;
+        $stock->status = StockStatus::WITHDRAWN;
         $stock->outgoing_receiver = $receiver;
-        $stock->outgoing_at = now();
+        $stock->withdrawn_at = now();
         $stock->update();
 
         return $stock;

@@ -27,7 +27,7 @@ class StockFactory extends Factory
     public function definition()
     {
         $flow = new StockFlow($this->faker->randomElement(StockFlow::toArray()));
-        $status = $flow == StockFlow::OUT ? StockStatus::OUTGOING : new StockStatus($this->faker->randomElement(StockStatus::toArray()));
+        $status = $flow == StockFlow::OUT ? StockStatus::WITHDRAWN : new StockStatus($this->faker->randomElement(StockStatus::toArray()));
 
         return [
             'quantity' => $this->faker->randomFloat(2, 0, 100),
@@ -40,8 +40,8 @@ class StockFactory extends Factory
             'outgoing_receiver' => $flow == StockFlow::OUT ? $this->faker->text : null,
             'receipt' => $this->faker->imageUrl(),
             'canceled_at' => $status == StockStatus::CANCELED ? now() : null,
-            'arrived_at' => $status == StockStatus::ARRIVED ? now() : null,
-            'outgoing_at' => $status == StockStatus::OUTGOING ? now() : null,
+            'received_at' => $status == StockStatus::RECEIVED ? now() : null,
+            'withdrawn_at' => $status == StockStatus::WITHDRAWN ? now() : null,
         ];
     }
 }

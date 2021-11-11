@@ -29,9 +29,9 @@ class StockResource extends JsonResource
             'status' => $this->status,
             'receipt' => $this->receipt,
             'outgoing_receiver' => $this->outgoing_receiver,
-            'outgoing_at' => $this->outgoing_at,
+            'withdrawn_at' => $this->withdrawn_at,
             'canceled_at' => $this->canceled_at,
-            'arrived_at' => $this->arrived_at,
+            'received_at' => $this->received_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at

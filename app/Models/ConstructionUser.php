@@ -16,25 +16,25 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property string $role
- * @property int $user_id
+ * @property int $company_user_id
  * @property int $construction_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read Construction $construction
+ * @property-read CompanyUser $companyUser
  * @property-read User $user
  * @method static ConstructionUserFactory factory(...$parameters)
  * @method static Builder|ConstructionUser newModelQuery()
  * @method static Builder|ConstructionUser newQuery()
  * @method static \Illuminate\Database\Query\Builder|ConstructionUser onlyTrashed()
  * @method static Builder|ConstructionUser query()
+ * @method static Builder|ConstructionUser whereCompanyUserId($value)
  * @method static Builder|ConstructionUser whereConstructionId($value)
  * @method static Builder|ConstructionUser whereCreatedAt($value)
  * @method static Builder|ConstructionUser whereDeletedAt($value)
  * @method static Builder|ConstructionUser whereId($value)
  * @method static Builder|ConstructionUser whereRole($value)
  * @method static Builder|ConstructionUser whereUpdatedAt($value)
- * @method static Builder|ConstructionUser whereUserId($value)
  * @method static \Illuminate\Database\Query\Builder|ConstructionUser withTrashed()
  * @method static \Illuminate\Database\Query\Builder|ConstructionUser withoutTrashed()
  * @mixin Eloquent
@@ -48,7 +48,7 @@ class ConstructionUser extends Model
      *
      * @var array
      */
-    protected $fillable = ['role', 'user_id', 'construction_id'];
+    protected $fillable = ['role', 'company_user_id', 'construction_id'];
 
     /**
      * The model's default values for attributes.
@@ -56,12 +56,12 @@ class ConstructionUser extends Model
      * @var array
      */
     protected $attributes = [
-        'role' => ConstructionUserRole::OWNER
+        'role' => ConstructionUserRole::VIEWER
     ];
 
-    public function user()
+    public function companyUser()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(CompanyUser::class);
     }
 
     public function construction()

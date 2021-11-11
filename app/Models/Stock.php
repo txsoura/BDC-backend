@@ -25,8 +25,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $outgoing_receiver
  * @property string|null $receipt
  * @property Carbon|null $canceled_at
- * @property Carbon|null $arrived_at
- * @property Carbon|null $outgoing_at
+ * @property Carbon|null $received_at
+ * @property Carbon|null $withdrawn_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -38,14 +38,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Stock newQuery()
  * @method static \Illuminate\Database\Query\Builder|Stock onlyTrashed()
  * @method static Builder|Stock query()
- * @method static Builder|Stock whereArrivedAt($value)
+ * @method static Builder|Stock whereReceivedAt($value)
  * @method static Builder|Stock whereCanceledAt($value)
  * @method static Builder|Stock whereConstructionId($value)
  * @method static Builder|Stock whereCreatedAt($value)
  * @method static Builder|Stock whereDeletedAt($value)
  * @method static Builder|Stock whereFlow($value)
  * @method static Builder|Stock whereId($value)
- * @method static Builder|Stock whereOutgoingAt($value)
+ * @method static Builder|Stock whereWithdrawnAt($value)
  * @method static Builder|Stock whereOutgoingReceiver($value)
  * @method static Builder|Stock wherePrice($value)
  * @method static Builder|Stock whereProductId($value)
@@ -67,9 +67,9 @@ class Stock extends Model
      *
      * @var array
      */
-    protected $fillable = ['quantity', 'price', 'construction_id', 'provider_id', 'product_id', 'flow', 'status', 'outgoing_receiver', 'receipt'];
+    protected $fillable = ['quantity', 'price', 'construction_id', 'provider_id', 'product_id', 'flow', 'outgoing_receiver', 'receipt'];
 
-    protected $dates = ['outgoing_at', 'canceled_at', 'arrived_at'];
+    protected $dates = ['withdrawn_at', 'canceled_at', 'received_at'];
 
     /**
      * The attributes that should be cast.
@@ -80,8 +80,8 @@ class Stock extends Model
         'quantity' => 'decimal:2',
         'price' => 'decimal:2',
         'canceled_at' => 'datetime',
-        'arrived_at' => 'datetime',
-        'outgoing_at' => 'datetime',
+        'received_at' => 'datetime',
+        'withdrawn_at' => 'datetime',
     ];
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserLang;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use Illuminate\Database\Migrations\Migration;
@@ -25,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->enum('status', UserStatus::toArray())->default(UserStatus::PENDENT);
             $table->enum('role', UserRole::toArray())->default(UserRole::USER);
             $table->string('fcm_token')->nullable();
+            $table->enum('lang', UserLang::toArray())->default(UserLang::PT);
             $table->timestamps();
             $table->softDeletes();
         });

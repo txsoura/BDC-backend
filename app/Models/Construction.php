@@ -26,9 +26,11 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $started_at
  * @property Carbon|null $finalized_at
  * @property Carbon|null $abandoned_at
+ * @property int $company_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Company $company
  * @property-read Collection|Inspection[] $inspections
  * @property-read int|null $inspections_count
  * @property-read Collection|Product[] $products
@@ -49,6 +51,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Construction whereAbandonedAt($value)
  * @method static Builder|Construction whereBudget($value)
  * @method static Builder|Construction whereCanceledAt($value)
+ * @method static Builder|Construction whereCompanyId($value)
  * @method static Builder|Construction whereCreatedAt($value)
  * @method static Builder|Construction whereDeletedAt($value)
  * @method static Builder|Construction whereEndDate($value)
@@ -73,7 +76,7 @@ class Construction extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'start_date', 'end_date', 'status', 'budget', 'project'];
+    protected $fillable = ['name', 'start_date', 'end_date', 'budget', 'project', 'company_id'];
 
     protected $dates = ['start_date', 'end_date', 'canceled_at', 'started_at', 'finalized_at', 'abandoned_at'];
 
@@ -101,6 +104,11 @@ class Construction extends Model
         'status' => ConstructionStatus::PENDENT,
         'budget' => '0.00',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
     public function users()
     {

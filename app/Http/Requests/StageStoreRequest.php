@@ -27,8 +27,8 @@ class StageStoreRequest extends CoreRequest
      */
     protected function prepareForValidation()
     {
-        return $this->merge([
-            'name' => ucwords($this->name),
-        ]);
+         $this->merge([
+             'name' => ucwords($this->name),
+         ]);
     }
 }

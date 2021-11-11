@@ -25,8 +25,10 @@ class ProviderUpdateRequest extends CoreRequest
      */
     protected function prepareForValidation()
     {
-        return $this->merge([
-            'name' => ucwords($this->name),
-        ]);
+        if ($this->name) {
+            $this->merge([
+                'name' => ucwords($this->name),
+            ]);
+        }
     }
 }

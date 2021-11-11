@@ -3,9 +3,9 @@
 namespace Database\Factories;
 
 use App\Enums\ConstructionUserRole;
+use App\Models\CompanyUser;
 use App\Models\Construction;
 use App\Models\ConstructionUser;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ConstructionUserFactory extends Factory
@@ -26,8 +26,8 @@ class ConstructionUserFactory extends Factory
     {
         return [
             'role' => new ConstructionUserRole($this->faker->randomElement(ConstructionUserRole::toArray())),
-            'user_id' => User::factory(),
             'construction_id' => Construction::factory(),
+            'company_user_id' => CompanyUser::factory(),
         ];
     }
 }

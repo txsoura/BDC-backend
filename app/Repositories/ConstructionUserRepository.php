@@ -10,19 +10,19 @@ class ConstructionUserRepository extends BaseConstructionRepository
      * Allow model relations to use in include
      * @var array
      */
-    protected $possibleRelationships = ['construction', 'user'];
+    protected $possibleRelationships = ['construction', 'companyUser'];
 
     /**
      * Allowed model columns to use in conditional query
      * @var array
      */
-    protected $allow_where = array('role', 'user_id', 'construction_id');
+    protected $allow_where = array('role', 'company_user_id', 'construction_id');
 
     /**
      * Allowed model columns to use in sort
      * @var array
      */
-    protected $allow_order = array('role', 'user_id', 'construction_id', 'created_at', 'updated_at');
+    protected $allow_order = array('role', 'company_user_id', 'construction_id', 'created_at', 'updated_at');
 
     /**
      * Allowed model columns to use in query search

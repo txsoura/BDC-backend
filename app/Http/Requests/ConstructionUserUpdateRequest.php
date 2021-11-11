@@ -16,7 +16,7 @@ class ConstructionUserUpdateRequest extends CoreRequest
     public function rules()
     {
         return [
-            'role' => ['required', 'string', Rule::in(ConstructionUserRole::toArray())],
+            'role' => ['sometimes', 'required', 'string', Rule::in(ConstructionUserRole::toArray())],
         ];
     }
 }

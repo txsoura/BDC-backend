@@ -63,60 +63,22 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): Response
     {
-        if ($e instanceof ModelNotFoundException) {
-            return response()->json([
-                'message' => trans('message.not_found'),
-                'error' => trans('message.entry_not_found', ['model' => str_replace('App\\Models\\', '', $e->getModel())])
-            ], 404);
-        }
-
-        if ($e instanceof RelationNotFoundException) {
-            return response()->json([
-                'message' => trans('message.not_found'),
-                'error' => trans('message.relation_not_found')
-            ], 404);
-        }
-
-        if ($e instanceof AccessDeniedHttpException) {
-            return response()->json([
-                'message' => trans('message.no_permission'),
-                'error' => trans('auth.access_denied')
-            ], 403);
-        }
-
-        if ($e instanceof InvalidSignatureException) {
-            return response()->json([
-                'error' => trans('message.invalid_signature')
-            ], 403);
-        }
-
         if ($e instanceof ThrottleRequestsException) {
             return response()->json([
-                'error' => trans('message.too_many_requests')
+                'error' => trans('core::message.too_many_requests')
             ], 429);
         }
 
         if ($e->getMessage() === 'CSRF token mismatch.') {
             return response()->json([
-                'error' => trans('message.invalid_csrf_token')
+                'error' => trans('core::message.invalid_csrf_token')
             ], 419);
         }
 
-        if ($e instanceof UnauthorizedHttpException) {
-
-            if ($e->getMessage() === 'User not found') {
-                return response()->json([
-                    'message' => trans('message.not_found'),
-                    'error' => trans('auth.user_not_found')
-                ], 404);
-            }
-
-            //To log untreated unauthorized exceptions
-            Log::error('UNAUTHORIZED_EXCEPTION:' . $e->getMessage());
+        if ($e instanceof InvalidSignatureException) {
             return response()->json([
-                'message' => trans('auth.unauthenticated'),
-                'error' => trans('message.contact_support')
-            ], 401);
+                'error' => trans('core::message.invalid_signature')
+            ], 403);
         }
 
         if ($e instanceof MethodNotAllowedHttpException) {
@@ -125,16 +87,54 @@ class Handler extends ExceptionHandler
             ], 405);
         }
 
-        if ($e instanceof NotFoundHttpException) {
+        if ($e instanceof RouteNotFoundException) {
             return response()->json([
-                'message' => trans('message.not_found'),
+                'message' => trans('core::message.not_found'),
+                'error' => trans('core::message.route_not_found')
             ], 404);
         }
 
-        if ($e instanceof RouteNotFoundException) {
+        if ($e instanceof AccessDeniedHttpException) {
             return response()->json([
-                'message' => trans('message.not_found'),
-                'error' => trans('message.route_not_found')
+                'message' => trans('core::message.no_permission'),
+                'error' => trans('core::message.access_denied')
+            ], 403);
+        }
+
+        if ($e instanceof ModelNotFoundException) {
+            return response()->json([
+                'message' => trans('core::message.not_found'),
+                'error' => trans('core::message.entry_not_found', ['model' => str_replace('App\\Models\\', '', $e->getModel())])
+            ], 404);
+        }
+
+        if ($e instanceof RelationNotFoundException) {
+            return response()->json([
+                'message' => trans('core::message.not_found'),
+                'error' => trans('core::message.relation_not_found')
+            ], 404);
+        }
+
+        if ($e instanceof UnauthorizedHttpException) {
+
+            if ($e->getMessage() === 'User not found') {
+                return response()->json([
+                    'message' => trans('core::message.not_found'),
+                    'error' => trans('core::message.user_not_found')
+                ], 404);
+            }
+
+            //To log untreated unauthorized exceptions
+            Log::error('UNAUTHORIZED_EXCEPTION:' . $e->getMessage());
+            return response()->json([
+                'message' => trans('core::message.unauthenticated'),
+                'error' => trans('core::message.contact_support')
+            ], 401);
+        }
+
+        if ($e instanceof NotFoundHttpException) {
+            return response()->json([
+                'message' => trans('core::message.not_found'),
             ], 404);
         }
 

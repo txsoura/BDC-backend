@@ -45,7 +45,7 @@ trait BaseConstructionCRUDMethodsController
             ->setRequest($request)
             ->show($id, $construction->id);
 
-        return new $this->resource($model, 200);
+        return new $this->resource($model);
     }
 
     public function update(Request $request, Construction $construction)

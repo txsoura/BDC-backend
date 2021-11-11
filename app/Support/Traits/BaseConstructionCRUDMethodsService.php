@@ -71,10 +71,7 @@ trait BaseConstructionCRUDMethodsService
 
     public function forceDestroy($id, $constructionId)
     {
-        $model = $this->model()::withTrashed()
-            ->whereId($id)
-            ->whereConstructionId($constructionId)
-            ->firstOrFail();
+        $model = $this->repository->findOrFailWithTrashed($id, $constructionId);
 
         try {
             $model->forceDelete();
@@ -89,10 +86,7 @@ trait BaseConstructionCRUDMethodsService
 
     public function restore($id, $constructionId)
     {
-        $model = $this->model()::withTrashed()
-            ->whereId($id)
-            ->whereConstructionId($constructionId)
-            ->firstOrFail();
+        $model = $this->repository->findOrFailWithTrashed($id, $constructionId);
 
         try {
             $model->restore();

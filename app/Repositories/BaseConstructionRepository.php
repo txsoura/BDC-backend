@@ -54,17 +54,12 @@ abstract class BaseConstructionRepository
             ->where('construction_id', $constructionId)
             ->when($this->request, function ($query) {
                 if (key_exists('include', $this->request))
-                    return $query->with(explode(',', $this->request['include']));
+                    $query->with(explode(',', $this->request['include']));
+
+                return $query;
             })
             ->first();
     }
-
-    /**
-     * Model class instance.
-     *
-     * @return string
-     */
-    abstract protected function model(): string;
 
     /**
      * @param int $id
@@ -77,8 +72,37 @@ abstract class BaseConstructionRepository
             ->where('construction_id', $constructionId)
             ->when($this->request, function ($query) {
                 if (key_exists('include', $this->request))
-                    return $query->with(explode(',', $this->request['include']));
+                    $query->with(explode(',', $this->request['include']));
+
+                return $query;
             })
             ->firstOrFail();
     }
+
+    /**
+     * @param int $id
+     * @param int $constructionId
+     * @return Model|null
+     */
+    public function findOrFailWithTrashed(int $id, int $constructionId): ?Model
+    {
+        return $this->model()::withTrashed()
+            ->where('id', $id)
+            ->where('construction_id', $constructionId)
+            ->when(key_exists('include', $this->request), function ($query) {
+                if ($this->checkIncludeColumns()) {
+                    $query->with(explode(',', $this->request['include']));
+                }
+
+                return $query;
+            })
+            ->firstOrFail();
+    }
+
+    /**
+     * Model class instance.
+     *
+     * @return string
+     */
+    abstract protected function model(): string;
 }

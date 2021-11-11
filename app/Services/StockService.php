@@ -99,11 +99,7 @@ class StockService extends CoreService
      */
     public function forceDestroy(int $id, int $constructionId, int $productId): bool
     {
-        $model = Stock::withTrashed()
-            ->whereId($id)
-            ->WhereConstructionId($constructionId)
-            ->whereProductId($productId)
-            ->firstOrFail();
+        $model = $this->repository->findOrFailWithTrashed($id, $constructionId, $productId);
 
         try {
             $model->forceDelete();
@@ -124,11 +120,7 @@ class StockService extends CoreService
      */
     public function restore(int $id, int $constructionId, int $productId): bool
     {
-        $model = Stock::withTrashed()
-            ->whereId($id)
-            ->WhereConstructionId($constructionId)
-            ->whereProductId($productId)
-            ->firstOrFail();
+        $model = $this->repository->findOrFailWithTrashed($id, $constructionId, $productId);
 
         try {
             $model->restore();
@@ -145,10 +137,10 @@ class StockService extends CoreService
      * @param Stock $stock
      * @return Stock|false
      */
-    public function arrive(Stock $stock)
+    public function receive(Stock $stock)
     {
         try {
-            return $this->repository->arrive($stock);
+            return $this->repository->receive($stock);
         } catch (Exception $e) {
             Log::error($e->getMessage());
 
@@ -176,10 +168,10 @@ class StockService extends CoreService
      * @param string $receiver
      * @return Stock|false
      */
-    public function outgoing(Stock $stock, string $receiver)
+    public function withdraw(Stock $stock, string $receiver)
     {
         try {
-            return $this->repository->outgoing($stock, $receiver);
+            return $this->repository->withdraw($stock, $receiver);
         } catch (Exception $e) {
             Log::error($e->getMessage());
 

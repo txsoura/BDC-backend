@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\ConstructionStatus;
+use App\Models\Company;
 use App\Models\Construction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -35,6 +36,7 @@ class ConstructionFactory extends Factory
             'started_at' => $status == ConstructionStatus::STARTED ? now() : null,
             'finalized_at' => $status == ConstructionStatus::FINALIZED ? now() : null,
             'abandoned_at' => $status == ConstructionStatus::ABANDONED ? now() : null,
+            'company_id' => Company::factory(),
         ];
     }
 }

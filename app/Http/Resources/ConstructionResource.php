@@ -23,6 +23,8 @@ class ConstructionResource extends JsonResource
             'status' => $this->status,
             'budget' => $this->budget,
             'project' => $this->project,
+            'company_id' => $this->company_id,
+            'company' => new CompanyResource($this->whenLoaded('company')),
             'users' => ConstructionUserResource::collection($this->whenLoaded('users')),
             'stages' => StageResource::collection($this->whenLoaded('stages')),
             'inspections' => InspectionResource::collection($this->whenLoaded('inspections')),

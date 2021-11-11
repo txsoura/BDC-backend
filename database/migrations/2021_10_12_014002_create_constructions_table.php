@@ -26,6 +26,7 @@ class CreateConstructionsTable extends Migration
             $table->timestamp('started_at')->nullable();
             $table->timestamp('finalized_at')->nullable();
             $table->timestamp('abandoned_at')->nullable();
+            $table->foreignId('company_id')->references('id')->on('companies');
             $table->timestamps();
             $table->softDeletes();
         });

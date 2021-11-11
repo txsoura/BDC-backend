@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "773b9f110e7edfcf7f108f6cec97dbf2",
+    "content-hash": "202022add45fb09013136eee94a9969d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5564,16 +5564,16 @@
         },
         {
             "name": "txsoura/core",
-            "version": "7.0.2",
+            "version": "7.0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/txsoura/core.git",
-                "reference": "c87c4516e0380c87fab41091eeb9591f1da27506"
+                "reference": "6894a6fe9ee5c5666f11d15556a62ad365db8714"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/txsoura/core/zipball/c87c4516e0380c87fab41091eeb9591f1da27506",
-                "reference": "c87c4516e0380c87fab41091eeb9591f1da27506",
+                "url": "https://api.github.com/repos/txsoura/core/zipball/6894a6fe9ee5c5666f11d15556a62ad365db8714",
+                "reference": "6894a6fe9ee5c5666f11d15556a62ad365db8714",
                 "shasum": ""
             },
             "require": {
@@ -5612,9 +5612,9 @@
             ],
             "support": {
                 "issues": "https://github.com/txsoura/core/issues",
-                "source": "https://github.com/txsoura/core/tree/7.0.2"
+                "source": "https://github.com/txsoura/core/tree/7.0.3.1"
             },
-            "time": "2021-07-30T23:31:30+00:00"
+            "time": "2021-10-17T20:52:26+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -9661,5 +9661,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }

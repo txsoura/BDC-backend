@@ -4,27 +4,31 @@ namespace App\Repositories;
 
 use App\Enums\ConstructionStatus;
 use App\Models\Construction;
-use Txsoura\Core\Repositories\CoreRepository;
+use App\Support\Traits\GetAllWithFilters;
+use Txsoura\Core\Helpers;
+use Txsoura\Core\Repositories\Traits\QueryFilterRepository;
 
-class ConstructionRepository extends CoreRepository
+class ConstructionRepository
 {
+    use Helpers, QueryFilterRepository, GetAllWithFilters;
+
     /**
      * Allow model relations to use in include
      * @var array
      */
-    protected $possibleRelationships = ['users', 'stages', 'inspections', 'stocks', 'products', 'providers'];
+    protected $possibleRelationships = ['company', 'users', 'stages', 'inspections', 'stocks', 'providers', 'products'];
 
     /**
      * Allowed model columns to use in conditional query
      * @var array
      */
-    protected $allow_where = array('name', 'start_date', 'end_date', 'status', 'budget');
+    protected $allow_where = array('name', 'start_date', 'end_date', 'status', 'budget', 'company_id');
 
     /**
      * Allowed model columns to use in sort
      * @var array
      */
-    protected $allow_order = array('name', 'start_date', 'end_date', 'status', 'budget', 'canceled_at', 'started_at', 'finalized_at', 'abandoned_at', 'created_at', 'updated_at');
+    protected $allow_order = array('name', 'start_date', 'end_date', 'status', 'budget', 'canceled_at', 'started_at', 'finalized_at', 'abandoned_at', 'company_id', 'created_at', 'updated_at');
 
     /**
      * Allowed model columns to use in query search
@@ -43,6 +47,62 @@ class ConstructionRepository extends CoreRepository
      * @var array
      */
     protected $allow_between_values = array('budget');
+
+    /**
+     * @param int $id
+     * @param int $companyId
+     * @return Construction|null
+     */
+    public function find(int $id, int $companyId): ?Construction
+    {
+        return Construction::whereCompanyId($companyId)
+            ->whereId($id)
+            ->when($this->request, function ($query) {
+                if (key_exists('include', $this->request))
+                    $query->with(explode(',', $this->request['include']));
+
+                return $query;
+            })
+            ->first();
+    }
+
+    /**
+     * @param int $id
+     * @param int $companyId
+     * @return Construction|null
+     */
+    public function findOrFail(int $id, int $companyId): ?Construction
+    {
+        return Construction::whereCompanyId($companyId)
+            ->whereId($id)
+            ->when($this->request, function ($query) {
+                if (key_exists('include', $this->request))
+                    $query->with(explode(',', $this->request['include']));
+
+                return $query;
+            })
+            ->firstOrFail();
+    }
+
+    /**
+     * @param int $id
+     * @param int $companyId
+     * @return Construction|null
+     */
+    public function findOrFailWithTrashed(int $id, int $companyId): ?Construction
+    {
+        return Construction::withTrashed()
+            ->whereCompanyId($companyId)
+            ->whereId($id)
+            ->when(key_exists('include', $this->request), function ($query) {
+                if ($this->checkIncludeColumns()) {
+                    $query->with(explode(',', $this->request['include']));
+                }
+
+                return $query;
+            })
+            ->firstOrFail();
+    }
 
     /**
      * @param Construction $construction

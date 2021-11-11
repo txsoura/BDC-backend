@@ -17,11 +17,11 @@ class ConstructionUserStoreRequest extends CoreRequest
     {
         return [
             'construction_id' => 'required|numeric|exists:constructions,id',
-            'user_id' => ['required', 'numeric', 'exists:users,id',
-                Rule::unique('construction_users', 'user_id')
+            'company_user_id' => ['required', 'numeric', 'exists:company_users,id',
+                Rule::unique('construction_users', 'company_user_id')
                     ->where('construction_id', $this->construction_id)
             ],
-            'role' => ['required', 'string', Rule::in(ConstructionUserRole::toArray())],
+            'role' => ['sometimes', 'required', 'string', Rule::in(ConstructionUserRole::toArray())],
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserLang;
 use App\Enums\UserRole;
 use Illuminate\Validation\Rule;
 use Txsoura\Core\Http\Requests\CoreRequest;
@@ -18,6 +19,7 @@ class UserUpdateRequest extends CoreRequest
         return [
             'name' => 'sometimes|required|string|max:255',
             'role' => ['sometimes', 'required', 'string', Rule::in(UserRole::toArray())],
+            'lang' => ['sometimes', 'required', 'string', Rule::in(UserLang::toArray())],
         ];
     }
 
@@ -28,8 +30,10 @@ class UserUpdateRequest extends CoreRequest
      */
     protected function prepareForValidation()
     {
-        return $this->merge([
-            'name' => ucwords($this->name),
-        ]);
+        if ($this->name) {
+            $this->merge([
+                'name' => ucwords($this->name),
+            ]);
+        }
     }
 }

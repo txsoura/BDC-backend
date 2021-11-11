@@ -5,26 +5,29 @@ namespace App\Repositories;
 use App\Enums\UserStatus;
 use App\Models\User;
 use Txsoura\Core\Repositories\CoreRepository;
+use Txsoura\Core\Repositories\Traits\SoftDeleteMethodsRepository;
 
 class UserRepository extends CoreRepository
 {
+    use SoftDeleteMethodsRepository;
+
     /**
      * Allow model relations to use in include
      * @var array
      */
-    protected $possibleRelationships = ['constructions'];
+    protected $possibleRelationships = ['companies', 'companies.company'];
 
     /**
      * Allowed model columns to use in conditional query
      * @var array
      */
-    protected $allow_where = array('email', 'status', 'name', 'role');
+    protected $allow_where = array('email', 'status', 'name', 'role', 'lang');
 
     /**
      * Allowed model columns to use in sort
      * @var array
      */
-    protected $allow_order = array('email', 'status', 'name', 'role', 'created_at', 'updated_at');
+    protected $allow_order = array('email', 'status', 'name', 'role', 'lang', 'created_at', 'updated_at');
 
     /**
      * Allowed model columns to use in query search

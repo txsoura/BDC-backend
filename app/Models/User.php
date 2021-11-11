@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\UserLang;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use Database\Factories\UserFactory;
 use Eloquent;
+use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,11 +32,12 @@ use Illuminate\Support\Carbon;
  * @property string $status
  * @property string $role
  * @property string|null $fcm_token
+ * @property string $lang
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read Collection|ConstructionUser[] $constructions
- * @property-read int|null $constructions_count
+ * @property-read Collection|CompanyUser[] $companies
+ * @property-read int|null $companies_count
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @method static UserFactory factory(...$parameters)
@@ -48,6 +51,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|User whereEmailVerifiedAt($value)
  * @method static Builder|User whereFcmToken($value)
  * @method static Builder|User whereId($value)
+ * @method static Builder|User whereLang($value)
  * @method static Builder|User whereName($value)
  * @method static Builder|User wherePassword($value)
  * @method static Builder|User whereRememberToken($value)
@@ -60,9 +64,9 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
  * @mixin Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements HasLocalePreference
 {
-    use  HasFactory, Notifiable, SoftDeletes;
+    use Notifiable, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -74,7 +78,6 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'status',
         'fcm_token'
     ];
 
@@ -105,11 +108,22 @@ class User extends Authenticatable
      */
     protected $attributes = [
         'status' => UserStatus::PENDENT,
-        'role' => UserRole::USER
+        'role' => UserRole::USER,
+        'lang' => UserLang::PT
     ];
 
-    public function constructions()
+    /**
+     * Get the user's preferred locale.
+     *
+     * @return string
+     */
+    public function preferredLocale(): string
     {
-        return $this->hasMany(ConstructionUser::class);
+        return $this->lang;
+    }
+
+    public function companies()
+    {
+        return $this->hasMany(CompanyUser::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserLang;
 use App\Enums\UserRole;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -22,7 +23,8 @@ class UserStoreRequest extends CoreRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => ['required', 'string', new Password],
-            'role' => ['required', 'string', Rule::in(UserRole::toArray())],
+            'role' => ['sometimes', 'required', 'string', Rule::in(UserRole::toArray())],
+            'lang' => ['sometimes', 'required', 'string', Rule::in(UserLang::toArray())],
         ];
     }
 
@@ -33,7 +35,7 @@ class UserStoreRequest extends CoreRequest
      */
     protected function prepareForValidation()
     {
-        return $this->merge([
+        $this->merge([
             'name' => ucwords($this->name),
             'email' => Str::lower($this->email),
             'password' => Hash::make('12345678'),

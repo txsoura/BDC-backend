@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\CompanyStatus;
+use Illuminate\Validation\Rule;
 use Txsoura\Core\Http\Requests\CoreRequest;
 
 class ConstructionStoreRequest extends CoreRequest
@@ -18,6 +20,10 @@ class ConstructionStoreRequest extends CoreRequest
             'start_date' => 'required|date|after:today',
             'end_date' => 'required|date|after:start_date',
             'budget' => 'required|numeric|min:0',
+            'company_id' => ['required', 'numeric',
+                Rule::exists('companies', 'id')
+                    ->where('status', CompanyStatus::APPROVED)
+            ],
         ];
     }
 
@@ -28,7 +34,7 @@ class ConstructionStoreRequest extends CoreRequest
      */
     protected function prepareForValidation()
     {
-        return $this->merge([
+        $this->merge([
             'name' => ucwords($this->name),
         ]);
     }

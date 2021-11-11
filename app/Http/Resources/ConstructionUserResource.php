@@ -18,8 +18,8 @@ class ConstructionUserResource extends JsonResource
         return [
             'id' => $this->id,
             'role' => $this->role,
-            'user_id' => $this->user_id,
-            'user' => new UserResource($this->whenLoaded('user')),
+            'company_user_id' => $this->company_user_id,
+            'company_user' => new CompanyUserResource($this->whenLoaded('companyUser')),
             'construction_id' => $this->construction_id,
             'construction' => new ConstructionResource($this->whenLoaded('construction')),
             'created_at' => $this->created_at,

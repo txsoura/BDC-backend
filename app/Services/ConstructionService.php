@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Http\Requests\ConstructionStoreRequest;
 use App\Http\Requests\ConstructionUpdateRequest;
-use App\Models\CompanyUser;
 use App\Models\Construction;
 use App\Repositories\ConstructionRepository;
 use Exception;
@@ -54,7 +53,7 @@ class ConstructionService
         $this->request = resolve($this->storeRequest);
 
         try {
-            return CompanyUser::create($this->request->validated());
+            return Construction::create($this->request->validated());
         } catch (Exception $e) {
             Log::error($e->getMessage());
 

@@ -194,6 +194,9 @@ class ConstructionRepository
         return Construction::withTrashed()
             ->whereCompanyId($companyId)
             ->whereId($id)
+            ->whereHas('users.companyUser', function ($query) {
+                $query->where('user_id', auth()->user()->id);
+            })
             ->when(key_exists('include', $this->request), function ($query) {
                 if ($this->checkIncludeColumns()) {
                     $query->with(explode(',', $this->request['include']));

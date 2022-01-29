@@ -17,4 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware('auth:sanctum')->get('/auth/user', 'MeController@me');
+Route::group(['prefix' => 'auth/user', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/', 'MeController@me');
+    Route::get('constructions/{id}', 'MeController@construction')->middleware('x.company');
+});

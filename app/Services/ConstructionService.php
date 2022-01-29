@@ -2,14 +2,18 @@
 
 namespace App\Services;
 
+use App\Enums\ConstructionUserRole;
 use App\Http\Requests\ConstructionStoreRequest;
 use App\Http\Requests\ConstructionUpdateRequest;
+use App\Models\CompanyUser;
 use App\Models\Construction;
 use App\Repositories\ConstructionRepository;
 use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 use Txsoura\Core\Helpers;
 use Txsoura\Core\Http\Requests\QueryParamsRequest;
 
@@ -47,13 +51,25 @@ class ConstructionService
 
     /**
      * @return Construction|false
+     * @throws Throwable
      */
     public function store()
     {
         $this->request = resolve($this->storeRequest);
 
         try {
-            return Construction::create($this->request->validated());
+            $companyUser = CompanyUser::whereCompanyId($this->request->company_id)->whereUserId(auth()->user()->id)->select('id')->first();
+
+            return DB::transaction(function () use ($companyUser) {
+                return Construction::create($this->request->validated())
+                    ->users()
+                    ->create(
+                        [
+                            'role' => ConstructionUserRole::OWNER,
+                            'company_user_id' => $companyUser->id
+                        ]
+                    );
+            }, 3);
         } catch (Exception $e) {
             Log::error($e->getMessage());
 

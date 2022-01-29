@@ -46,4 +46,20 @@ class ConstructionUserRepository extends BaseConstructionRepository
     {
         return ConstructionUser::class;
     }
+
+    /**
+     * @param int $constructionId
+     * @param int $companyId
+     * @param int $userId
+     * @return ConstructionUser|null
+     */
+    public function getByConstructionIdAndCompanyIdAndUserId(int $constructionId, int $companyId, int $userId): ?ConstructionUser
+    {
+        return ConstructionUser::whereConstructionId($constructionId)
+            ->whereHas('companyUser', function ($query) use ($companyId, $userId) {
+                $query->where('company_id', $companyId)
+                    ->where('user_id', $userId);
+            })
+            ->first();
+    }
 }

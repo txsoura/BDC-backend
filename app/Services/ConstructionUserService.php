@@ -39,4 +39,15 @@ class ConstructionUserService extends CoreService
     {
         return ConstructionUser::class;
     }
+
+    /**
+     * @param int $constructionId
+     * @param int $companyId
+     * @param int $userId
+     * @return ConstructionUser|null
+     */
+    public function getByConstructionIdAndCompanyIdAndUserId(int $constructionId, int $companyId, int $userId): ?ConstructionUser
+    {
+        return $this->repository->getByConstructionIdAndCompanyIdAndUserId($constructionId, $companyId, $userId);
+    }
 }
